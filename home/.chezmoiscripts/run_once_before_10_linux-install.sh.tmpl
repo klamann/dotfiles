@@ -10,7 +10,7 @@ fi
 
 printf '%s' \
     "running first-time setup of klamann's dotfiles for " \
-    "{{ .chezmoi.username }}@{{ .chezmoi.hostname }} on {{ .chezmoi.osRelease }}.\n" \
+    "{{ .chezmoi.username }}@{{ .chezmoi.hostname }} on {{ .chezmoi.osRelease.name }}.\n" \
 
 # define package manager and packages
 packages=(
