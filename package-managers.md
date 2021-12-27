@@ -25,6 +25,8 @@ We need to use the right update / install command on each system and install pac
 
 ## /etc/os-release
 
+These are the `/etc/os-release` outputs for various operating systems.
+
 ### Debian
 
 ```
