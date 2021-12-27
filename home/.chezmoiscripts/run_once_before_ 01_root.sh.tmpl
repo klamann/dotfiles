@@ -8,6 +8,10 @@ if [ $EUID != 0 ]; then
     exit $?
 fi
 
+printf '%s' \
+    "running first-time setup of klamann's dotfiles for " \
+    "{{ .chezmoi.username }}@{{ .chezmoi.hostname }} on {{ .chezmoi.osRelease }}.\n" \
+
 # define package manager and packages
 packages=(
     curl
@@ -42,5 +46,10 @@ exit 1
 {{ end }}
 
 # install packages
+echo "updating package index and installing packages ${packages[@]}"
 $update
 $install "${packages[@]}"
+
+# switch to zsh
+echo "setting zsh as login shell for {{ .chezmoi.username }}"
+chsh {{ .chezmoi.username }} -s /usr/bin/zsh
