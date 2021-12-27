@@ -75,9 +75,6 @@ DISABLE_UPDATE_PROMPT="true"
 # add .local/bin to PATH
 path=('{{ .chezmoi.homeDir }}/bin' '{{ .chezmoi.homeDir }}/.local/bin' $path)
 
-# I give a fuck
-eval $(thefuck --alias)
-
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -97,8 +94,13 @@ plugins=(
   pip
   #alias-tips
   tldr
-  thefuck
 )
+
+# I give a fuck
+if command -v thefuck &> /dev/null; then
+    eval $(thefuck --alias)
+    plugins+=(thefuck)
+fi
 
 source $ZSH/oh-my-zsh.sh
 
