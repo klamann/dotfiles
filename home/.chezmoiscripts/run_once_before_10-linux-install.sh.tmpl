@@ -8,9 +8,9 @@ if [ $EUID != 0 ]; then
     exit $?
 fi
 
-printf '%s' \
+printf '%s\n' \
     "running first-time setup of klamann's dotfiles for " \
-    "{{ .chezmoi.username }}@{{ .chezmoi.hostname }} on {{ .chezmoi.osRelease.name }}." \
+    "{{ .chezmoi.username }}@{{ .chezmoi.hostname }} on {{ .chezmoi.osRelease.name }}."
 
 # define package manager and packages
 packages=(
