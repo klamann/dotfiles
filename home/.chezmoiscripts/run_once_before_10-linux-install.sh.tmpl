@@ -10,7 +10,7 @@ fi
 
 printf '%s' \
     "running first-time setup of klamann's dotfiles for " \
-    "{{ .chezmoi.username }}@{{ .chezmoi.hostname }} on {{ .chezmoi.osRelease.name }}.\n" \
+    "{{ .chezmoi.username }}@{{ .chezmoi.hostname }} on {{ .chezmoi.osRelease.name }}." \
 
 # define package manager and packages
 packages=(
@@ -52,4 +52,4 @@ $install "${packages[@]}"
 
 # switch to zsh
 echo "setting zsh as login shell for {{ .chezmoi.username }}"
-chsh {{ .chezmoi.username }} -s /usr/bin/zsh
+chsh {{ .chezmoi.username }} -s $(which zsh)
