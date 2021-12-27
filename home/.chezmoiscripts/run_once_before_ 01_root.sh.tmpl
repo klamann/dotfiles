@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -ue
+
+# Run this as sudo!
+if [ $EUID != 0 ]; then
+    echo "need to switch to root to install necessary packages"
+    sudo "$0" "$@"
+    exit $?
+fi
+
+# define package manager and packages
+packages=(
+	curl
+	git
+    htop
+    nano
+    zsh
+)
+{{ if (eq .chezmoi.osRelease.id "debian" "ubuntu") -}}
+update=apt-get update
+install=apt-get install -y
+packages+=(passwd)
+{{ else if (eq .chezmoi.osRelease.id "alpine") -}}
+update=apk update
+install=apk add
+packages+=(util-linux)
+{{ else if (eq .chezmoi.osRelease.id "arch") -}}
+update=pacman -Sy
+install=pacman -S --noconfirm
+packages+=(util-linux)
+{{ else if (eq (trimAll "\"" .chezmoi.osRelease.id) "centos") -}}
+update=yum check-update
+install=yum -y install
+packages+=(util-linux-ng)
+{{ else if (eq .chezmoi.osRelease.id "fedora") -}}
+update=dnf check-update
+install=dnf -y install
+packages+=(util-linux-user)
+{{ else -}}
+echo "unexpected distribution {{ .chezmoi.osRelease.id }}, cannot install packages"
+exit 1
+{{ end }}
+
+# install packages
+$update
+$install ${packages[@]}
