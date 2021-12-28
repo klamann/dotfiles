@@ -31,9 +31,9 @@ update='pacman -Sy'
 install='pacman -S --noconfirm'
 packages+=(htop util-linux tldr)
 {{ else if (eq (trimAll "\"" .chezmoi.osRelease.id) "centos") -}}
-update='yum check-update'
-install='yum -y install'
-packages+=(util-linux-ng)
+update='dnf check-update'
+install='dnf -y install'
+packages+=(util-linux-user)
 {{ else if (eq .chezmoi.osRelease.id "fedora") -}}
 update='dnf check-update'
 install='dnf -y install'
