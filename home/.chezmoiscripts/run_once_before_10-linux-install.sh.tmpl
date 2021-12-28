@@ -46,7 +46,10 @@ exit 1
 
 # install packages
 echo "updating package index and installing packages ${packages[@]}"
-$update
+{{ if (eq (trimAll "\"" .chezmoi.osRelease.id) "centos") -}}
+$install glibc-langpack-en || true
+{{ end }}
+$update || true
 $install "${packages[@]}"
 
 # switch to zsh
