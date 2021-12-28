@@ -15,22 +15,21 @@ echo "running first-time setup of klamann's dotfiles for" \
 packages=(
     curl
     git
-    htop
     nano
     zsh
 )
 {{ if (eq .chezmoi.osRelease.id "debian" "ubuntu") -}}
 update='apt-get update'
 install='apt-get install -y'
-packages+=(passwd tldr)
+packages+=(htop passwd tldr)
 {{ else if (eq .chezmoi.osRelease.id "alpine") -}}
 update='apk update'
 install='apk add'
-packages+=(util-linux)
+packages+=(htop util-linux)
 {{ else if (eq .chezmoi.osRelease.id "arch") -}}
 update='pacman -Sy'
 install='pacman -S --noconfirm'
-packages+=(util-linux tldr)
+packages+=(htop util-linux tldr)
 {{ else if (eq (trimAll "\"" .chezmoi.osRelease.id) "centos") -}}
 update='yum check-update'
 install='yum -y install'
@@ -38,7 +37,7 @@ packages+=(util-linux-ng)
 {{ else if (eq .chezmoi.osRelease.id "fedora") -}}
 update='dnf check-update'
 install='dnf -y install'
-packages+=(util-linux-user tldr)
+packages+=(htop util-linux-user tldr)
 {{ else -}}
 echo "unexpected distribution {{ .chezmoi.osRelease.id }}, cannot install packages"
 exit 1
