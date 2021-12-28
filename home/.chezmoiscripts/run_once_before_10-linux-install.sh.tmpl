@@ -2,7 +2,7 @@
 set -ue
 
 # Run this as sudo!
-if [ $EUID != 0 ]; then
+if [ $(id -u) != 0 ]; then
     echo "need to switch to root to install necessary packages"
     sudo "$0" "$@"
     exit $?
