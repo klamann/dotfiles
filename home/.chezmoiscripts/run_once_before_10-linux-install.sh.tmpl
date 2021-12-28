@@ -26,7 +26,7 @@ packages+=(htop passwd tldr)
 {{ else if (eq .chezmoi.osRelease.id "alpine") -}}
 update='apk update'
 install='apk add'
-packages+=(htop util-linux)
+packages+=(htop shadow)
 {{ else if (eq .chezmoi.osRelease.id "arch") -}}
 update='pacman -Sy'
 install='pacman -S --noconfirm'
