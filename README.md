@@ -1,6 +1,10 @@
 # klamann's dotfiles
 
-...
+managed with [chezmoi](https://www.chezmoi.io/).
+
+Install dotfiles on a new machine with
+
+    sh -c "$(curl -fsLS git.io/chezmoi)" -- init --apply klamann
 
 ## goals
 
@@ -12,4 +16,7 @@
 
 ## random notes
 
+* [Chezmoi Docs](https://www.chezmoi.io/docs/how-to/)
 * [Template Variables](https://github.com/twpayne/chezmoi/blob/master/docs/REFERENCE.md#template-variables)
+* [Awesome dotfiles](https://github.com/webpro/awesome-dotfiles)
+* [dotfiles.github.io](https://dotfiles.github.io/)
