@@ -17,6 +17,7 @@ packages=(
     git
     nano
     zsh
+    which
 )
 {{ if (eq .chezmoi.osRelease.id "debian" "ubuntu") -}}
 update='apt-get update'
