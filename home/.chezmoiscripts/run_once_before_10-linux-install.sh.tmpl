@@ -17,7 +17,6 @@ packages=(
     git
     nano
     zsh
-    which
 )
 {{ if (eq .chezmoi.osRelease.id "debian" "ubuntu") -}}
 update='apt-get update'
@@ -26,19 +25,19 @@ packages+=(htop passwd tldr)
 {{ else if (eq .chezmoi.osRelease.id "alpine") -}}
 update='apk update'
 install='apk add'
-packages+=(htop shadow)
+packages+=(htop shadow which)
 {{ else if (eq .chezmoi.osRelease.id "arch") -}}
 update='pacman -Sy'
 install='pacman -S --noconfirm'
-packages+=(htop util-linux tldr)
+packages+=(htop util-linux tldr which)
 {{ else if (eq (trimAll "\"" .chezmoi.osRelease.id) "centos") -}}
 update='dnf check-update'
 install='dnf -y install'
-packages+=(util-linux-user)
+packages+=(util-linux-user which)
 {{ else if (eq .chezmoi.osRelease.id "fedora") -}}
 update='dnf check-update'
 install='dnf -y install'
-packages+=(htop util-linux-user tldr)
+packages+=(htop util-linux-user tldr which)
 {{ else -}}
 echo "unexpected distribution {{ .chezmoi.osRelease.id }}, cannot install packages"
 exit 1
