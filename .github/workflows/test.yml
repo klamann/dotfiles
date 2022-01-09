@@ -1,0 +1,31 @@
+name: test
+
+on:
+  push:
+    branches:
+    - master
+    paths-ignore:
+    - '*.md'
+  pull_request:
+    branches:
+    - master
+    paths-ignore:
+    - '*.md'
+
+jobs:
+  test-fedora:
+    container: fedora:latest
+    runs-on: ubuntu-latest
+    name: Test dotfiles with chezmoi on Fedora
+    steps:
+    - uses: actions/checkout@v2
+    - name: install chezmoi
+      run: sh -c "$(curl -fsLS git.io/chezmoi)"
+    - name: init chezmoi from current code
+      run: |
+        rm -rf ~/.local/share/chezmoi
+        mv . ~/.local/share/chezmoi
+        ls -lh ~/.local/share/chezmoi
+        chezmoi apply
+    - name: test the environment
+      run: .github/workflows/test.sh
