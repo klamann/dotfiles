@@ -19,12 +19,16 @@ jobs:
     name: Test dotfiles with chezmoi on Fedora
     steps:
     - uses: actions/checkout@v2
+      with:
+        path: 'dotfiles'
     - name: install chezmoi
       run: sh -c "$(curl -fsLS git.io/chezmoi)"
     - name: init chezmoi from current code
       run: |
+        ls -l
         rm -rf ~/.local/share/chezmoi
-        mv . ~/.local/share/chezmoi
+        mkdir -p ~/.local/share
+        mv dotfiles ~/.local/share/chezmoi
         ls -lh ~/.local/share/chezmoi
         chezmoi apply
     - name: test the environment
