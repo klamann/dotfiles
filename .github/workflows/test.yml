@@ -3,34 +3,51 @@ name: test
 on:
   push:
     branches:
-    - master
+      - master
     paths-ignore:
-    - '*.md'
+      - "*.md"
   pull_request:
     branches:
-    - master
+      - master
     paths-ignore:
-    - '*.md'
+      - "*.md"
 
 jobs:
+  test-ubuntu:
+    container: ubuntu:latest
+    runs-on: ubuntu-latest
+    name: Test dotfiles with chezmoi on Ubuntu
+    steps:
+      - name: install dependencies
+        run: apt-get update && apt-get install -y curl
+      - name: install chezmoi
+        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
+      - uses: actions/checkout@v2
+        with:
+          path: "dotfiles"
+      - name: init chezmoi from current code
+        run: |
+          rm -rf ~/.local/share/chezmoi
+          mkdir -p ~/.local/share
+          mv dotfiles ~/.local/share/chezmoi
+          ~/bin/chezmoi apply
+      - name: test the environment
+        run: zsh ~/.local/share/chezmoi/.github/workflows/test.sh
   test-fedora:
     container: fedora:latest
     runs-on: ubuntu-latest
     name: Test dotfiles with chezmoi on Fedora
     steps:
-    - uses: actions/checkout@v2
-      with:
-        path: 'dotfiles'
-    - name: install chezmoi
-      run: sh -c "$(curl -fsLS git.io/chezmoi)"
-    - name: init chezmoi from current code
-      run: |
-        set -uex
-        ls -l
-        rm -rf ~/.local/share/chezmoi
-        mkdir -p ~/.local/share
-        mv dotfiles ~/.local/share/chezmoi
-        ls -lh ~/.local/share/chezmoi
-         ~/bin/chezmoi apply
-    - name: test the environment
-      run: .github/workflows/test.sh
+      - name: install chezmoi
+        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
+      - uses: actions/checkout@v2
+        with:
+          path: "dotfiles"
+      - name: init chezmoi from current code
+        run: |
+          rm -rf ~/.local/share/chezmoi
+          mkdir -p ~/.local/share
+          mv dotfiles ~/.local/share/chezmoi
+          ~/bin/chezmoi apply
+      - name: test the environment
+        run: zsh ~/.local/share/chezmoi/.github/workflows/test.sh

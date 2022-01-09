@@ -1,9 +1,8 @@
 #!/usr/bin/env zsh
-set -uex
 
-echo $0
+source ~/.zshrc
+echo $PATH
 zsh --version
 htop --version
 git --version
 chezmoi --version
-chezmoi verify

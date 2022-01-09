@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 echo "setup of klamann's dotfiles with chezmoi terminated successfully."
-echo "switching to zsh now"
-zsh
-source ~/.zshrc
+
+if [[ -z "${CI}" ]]; then
+    echo "switching to zsh now"
+    zsh
+    source ~/.zshrc
+fi
