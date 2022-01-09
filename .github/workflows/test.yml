@@ -31,6 +31,6 @@ jobs:
         mkdir -p ~/.local/share
         mv dotfiles ~/.local/share/chezmoi
         ls -lh ~/.local/share/chezmoi
-        PATH="~/bin/:$PATH" chezmoi apply
+         ~/bin/chezmoi apply
     - name: test the environment
       run: .github/workflows/test.sh
