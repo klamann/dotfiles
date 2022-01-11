@@ -13,6 +13,7 @@ on:
       - "*.md"
 
 jobs:
+
   test-ubuntu:
     container: ubuntu:latest
     runs-on: ubuntu-latest
@@ -33,11 +34,92 @@ jobs:
           ~/bin/chezmoi apply
       - name: test the environment
         run: zsh ~/.local/share/chezmoi/.github/workflows/test.sh
+
   test-fedora:
     container: fedora:latest
     runs-on: ubuntu-latest
     name: Test dotfiles with chezmoi on Fedora
     steps:
+      - name: install chezmoi
+        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
+      - uses: actions/checkout@v2
+        with:
+          path: "dotfiles"
+      - name: init chezmoi from current code
+        run: |
+          rm -rf ~/.local/share/chezmoi
+          mkdir -p ~/.local/share
+          mv dotfiles ~/.local/share/chezmoi
+          ~/bin/chezmoi apply
+      - name: test the environment
+        run: zsh ~/.local/share/chezmoi/.github/workflows/test.sh
+
+  test-alpine:
+    container: alpine:latest
+    runs-on: ubuntu-latest
+    name: Test dotfiles with chezmoi on Alpine Linux
+    steps:
+      - name: install dependencies
+        run: apk add curl bash
+      - name: install chezmoi
+        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
+      - uses: actions/checkout@v2
+        with:
+          path: "dotfiles"
+      - name: init chezmoi from current code
+        run: |
+          rm -rf ~/.local/share/chezmoi
+          mkdir -p ~/.local/share
+          mv dotfiles ~/.local/share/chezmoi
+          ~/bin/chezmoi apply
+      - name: test the environment
+        run: zsh ~/.local/share/chezmoi/.github/workflows/test.sh
+
+  test-archlinux:
+    container: archlinux:latest
+    runs-on: ubuntu-latest
+    name: Test dotfiles with chezmoi on Arch Linux
+    steps:
+      - name: install chezmoi
+        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
+      - uses: actions/checkout@v2
+        with:
+          path: "dotfiles"
+      - name: init chezmoi from current code
+        run: |
+          rm -rf ~/.local/share/chezmoi
+          mkdir -p ~/.local/share
+          mv dotfiles ~/.local/share/chezmoi
+          ~/bin/chezmoi apply
+      - name: test the environment
+        run: zsh ~/.local/share/chezmoi/.github/workflows/test.sh
+
+  test-centos:
+    container: centos:latest
+    runs-on: ubuntu-latest
+    name: Test dotfiles with chezmoi on CentOS
+    steps:
+      - name: install chezmoi
+        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
+      - uses: actions/checkout@v2
+        with:
+          path: "dotfiles"
+      - name: init chezmoi from current code
+        run: |
+          rm -rf ~/.local/share/chezmoi
+          mkdir -p ~/.local/share
+          mv dotfiles ~/.local/share/chezmoi
+          ~/bin/chezmoi apply
+      - name: test the environment
+        run: zsh ~/.local/share/chezmoi/.github/workflows/test.sh
+
+  test-amazonlinux:
+    container: amazonlinux:latest
+    runs-on: ubuntu-latest
+    name: Test dotfiles with chezmoi on Amazon Linux
+    steps:
+      - name: install dependencies
+        run: yum install -y curl tar gzip
       - name: install chezmoi
         run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
       - uses: actions/checkout@v2
