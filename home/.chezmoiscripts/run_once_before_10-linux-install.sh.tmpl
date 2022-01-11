@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 set -ue
 
 # Run this as sudo!
@@ -18,30 +18,42 @@ packages=(
     nano
     zsh
 )
-{{ if (eq .chezmoi.osRelease.id "debian" "ubuntu") -}}
-update='apt-get update'
-install='apt-get install -y'
-packages+=(htop passwd tldr)
-{{ else if (eq .chezmoi.osRelease.id "alpine") -}}
-update='apk update'
-install='apk add'
-packages+=(htop shadow which)
-{{ else if (eq .chezmoi.osRelease.id "arch") -}}
-update='pacman -Sy'
-install='pacman -S --noconfirm'
-packages+=(htop util-linux tldr which)
-{{ else if (eq (trimAll "\"" .chezmoi.osRelease.id) "centos") -}}
-update='dnf check-update'
-install='dnf -y install'
-packages+=(util-linux-user which)
-{{ else if (eq .chezmoi.osRelease.id "fedora") -}}
-update='dnf check-update'
-install='dnf -y install'
-packages+=(htop util-linux-user tldr which)
-{{ else -}}
-echo "unexpected distribution {{ .chezmoi.osRelease.id }}, cannot install packages"
-exit 1
-{{ end }}
+
+# find the right package manager for the current system
+if [ -x "$(command -v apt-get)" ]; then
+    # apt: Debian, Ubuntu, ...
+    update='apt-get update'
+    install='apt-get install -y'
+    packages+=(htop passwd tldr)
+elif [ -x "$(command -v apk)" ]; then
+    # apk: Alpine
+    update='apk update'
+    install='apk add'
+    packages+=(htop shadow which)
+elif [ -x "$(command -v pacman)" ]; then
+    # pacman: Arch
+    update='pacman -Sy'
+    install='pacman -S --noconfirm'
+    packages+=(htop util-linux tldr which)
+elif [ -x "$(command -v dnf)" ]; then
+    # dnf: Fedora, CentOS, Amazon, ...
+    update='dnf check-update'
+    install='dnf -y install'
+    {{ if (eq (trimAll "\"" .chezmoi.osRelease.id) "centos") -}}
+    packages+=(util-linux-user which)
+    {{ else -}}
+    packages+=(htop util-linux-user tldr which)
+    {{ end }}
+elif [ -x "$(command -v yum)" ]; then
+    # yum: mostly the same as dnf
+    update='yum check-update'
+    install='yum -y install'
+    packages+=(htop util-linux-user tldr which)
+else
+    # more to add eventually: zypper, portage, nix, homebrew
+    echo "unexpected distribution {{ .chezmoi.osRelease.id }}, cannot install packages"
+    exit 1
+fi
 
 # install packages
 echo "updating package index and installing packages ${packages[@]}"
