@@ -59,6 +59,8 @@ fi
 echo "updating package index and installing packages ${packages[@]}"
 {{ if (eq (trimAll "\"" .chezmoi.osRelease.id) "centos") -}}
 $install glibc-langpack-en || true
+{{ else if (eq .chezmoi.osRelease.id "alpine") -}}
+echo "auth sufficient pam_rootok.so" >> /etc/pam.d/chsh
 {{ end }}
 $update || true
 $install "${packages[@]}"
