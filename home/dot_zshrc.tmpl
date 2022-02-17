@@ -31,7 +31,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
 DISABLE_UPDATE_PROMPT="true"
@@ -113,11 +113,7 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+export EDITOR='nano'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -126,23 +122,24 @@ source $ZSH/oh-my-zsh.sh
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 
+#
 # docker-compose
-alias dc='docker-compose'         # alias
-alias dcl='dc logs -f --tail 200' # show logs
-alias dcs='dc stop'               # stop containers
-alias dcu='dc up -d'              # start and detach
+#
+alias dc='docker-compose'
+# show recent logs and follow
+alias dcl='dc logs -f --tail 200'
+# stop containers
+alias dcs='dc stop'
+# start and detach
+alias dcu='dc up -d'
 # stop and remove the container
 unalias dcrm
-dcrm() { if [ $# -eq 0 ]; then dcs && yes|dc rm; else dcs "$1" && yes|dc rm "$1"; fi ; }
+dcrm() { if [ $# -eq 0 ]; then dcs && yes|dc rm; else dcs "$@" && yes|dc rm "$@"; fi ; }
 # stop and up -d
-dcsu() { if [ $# -eq 0 ]; then dcs && dcu; else dcs "$1" && dcu "$1"; fi ; }
+dcsu() { if [ $# -eq 0 ]; then dcs && dcu; else dcs "$@" && dcu "$@"; fi ; }
 # stop, remove container, start
-dcrmu() { if [ $# -eq 0 ]; then dcrm && dcu; else dcrm "$1" && dcu "$1"; fi ; }
+dcrmu() { if [ $# -eq 0 ]; then dcrm && dcu; else dcrm "$@" && dcu "$@"; fi ; }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
