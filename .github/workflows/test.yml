@@ -95,7 +95,7 @@ jobs:
         run: zsh ~/.local/share/chezmoi/.github/workflows/test.sh
 
   test-centos:
-    container: centos:latest
+    container: centos:centos7
     runs-on: ubuntu-latest
     name: Test dotfiles with chezmoi on CentOS
     steps:
