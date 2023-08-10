@@ -4,7 +4,7 @@ managed with [chezmoi](https://www.chezmoi.io/).
 
 Install dotfiles on a new machine with
 
-    sh -c "$(curl -fsLS git.io/chezmoi)" -- init --apply klamann
+    sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply klamann
 
 ## goals
 
