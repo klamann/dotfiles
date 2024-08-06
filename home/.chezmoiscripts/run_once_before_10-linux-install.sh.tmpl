@@ -39,9 +39,9 @@ elif [ -x "$(command -v dnf)" ]; then
     update='dnf check-update'
     install='dnf -y install'
     {{ if (eq (trimAll "\"" .chezmoi.osRelease.id) "centos") -}}
-    packages+=(util-linux-user which)
+    packages+=(util-linux-user tldr which)
     {{ else -}}
-    packages+=(htop util-linux-user tldr which)
+    packages+=(htop util-linux-user which)
     {{ end }}
 elif [ -x "$(command -v yum)" ]; then
     # yum: mostly the same as dnf
