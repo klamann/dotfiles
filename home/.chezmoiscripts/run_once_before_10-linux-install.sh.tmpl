@@ -13,7 +13,6 @@ echo "running first-time setup of klamann's dotfiles for" \
 
 # define package manager and packages
 packages=(
-    curl
     git
     nano
     zsh
@@ -24,17 +23,17 @@ if [ -x "$(command -v apt-get)" ]; then
     # apt: Debian, Ubuntu, ...
     update='apt-get update'
     install='apt-get install -y'
-    packages+=(htop passwd tldr)
+    packages+=(curl htop passwd tldr)
 elif [ -x "$(command -v apk)" ]; then
     # apk: Alpine
     update='apk update'
     install='apk add'
-    packages+=(htop shadow which)
+    packages+=(curl htop shadow which)
 elif [ -x "$(command -v pacman)" ]; then
     # pacman: Arch
     update='pacman -Sy'
     install='pacman -S --noconfirm'
-    packages+=(htop util-linux tldr which)
+    packages+=(curl htop util-linux tldr which)
 elif [ -x "$(command -v dnf)" ]; then
     # dnf: Fedora, CentOS, Amazon, ...
     update='dnf check-update'
