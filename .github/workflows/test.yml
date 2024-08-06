@@ -95,9 +95,9 @@ jobs:
         run: zsh ~/.local/share/chezmoi/.github/workflows/test.sh
 
   test-centos:
-    container: centos:centos7
+    container: quay.io/centos/centos:stream9
     runs-on: ubuntu-latest
-    name: Test dotfiles with chezmoi on CentOS
+    name: Test dotfiles with chezmoi on CentOS Stream
     steps:
       - name: install chezmoi
         run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
@@ -119,7 +119,9 @@ jobs:
     name: Test dotfiles with chezmoi on Amazon Linux
     steps:
       - name: install dependencies
-        run: yum install -y curl tar gzip
+        run: |
+          yum check-update
+          yum install -y curl tar gzip
       - name: install chezmoi
         run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
       - uses: actions/checkout@v2
