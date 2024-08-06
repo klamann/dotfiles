@@ -121,7 +121,7 @@ jobs:
       - name: install dependencies
         run: |
           yum check-update
-          yum install -y curl tar gzip
+          yum install -y tar gzip
       - name: install chezmoi
         run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
       - uses: actions/checkout@v2

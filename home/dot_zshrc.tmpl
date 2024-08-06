@@ -72,8 +72,8 @@ DISABLE_UPDATE_PROMPT="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# add .local/bin to PATH
-path=('{{ .chezmoi.homeDir }}/bin' '{{ .chezmoi.homeDir }}/.local/bin' $path)
+# add binaries from home directory to PATH
+path=('{{ .chezmoi.homeDir }}/bin' '{{ .chezmoi.homeDir }}/.local/bin' '{{ .chezmoi.homeDir }}/go/bin' '{{ .chezmoi.homeDir }}/.cargo/bin' $path)
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
@@ -89,10 +89,10 @@ plugins=(
   themes
   ufw
   fd
+  dirhistory
   docker-compose
   python
   pip
-  #alias-tips
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
@@ -113,7 +113,7 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-export EDITOR='nano'
+export EDITOR=nano
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -122,24 +122,45 @@ export EDITOR='nano'
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
 
-#
+# acme.sh
+. "/home/sebi/.acme.sh/acme.sh.env"
+
 # docker-compose
-#
-alias dc='docker-compose'
-# show recent logs and follow
-alias dcl='dc logs -f --tail 200'
-# stop containers
-alias dcs='dc stop'
-# start and detach
-alias dcu='dc up -d'
-# stop and remove the container
+alias dc='docker compose'         # use compose V2
+alias dcl='dc logs -f --tail 200' # show logs
+alias dcs='dc stop'               # stop containers
+alias dcd='dc down'               # stop and remove containers, networks, etc
 unalias dcrm
-dcrm() { if [ $# -eq 0 ]; then dcs && yes|dc rm; else dcs "$@" && yes|dc rm "$@"; fi ; }
+alias dcrm='dc down'              # for historical reasons
+alias dcu='dc up -d'              # start and detach
+alias dcr='dc restart'            # restart, keep container
+alias dce='dc exec'               # exec <service> bash
 # stop and up -d
-dcsu() { if [ $# -eq 0 ]; then dcs && dcu; else dcs "$@" && dcu "$@"; fi ; }
-# stop, remove container, start
-dcrmu() { if [ $# -eq 0 ]; then dcrm && dcu; else dcrm "$@" && dcu "$@"; fi ; }
+dcsu() { if [ $# -eq 0 ]; then dcs && dcu; else dcs "$1" && dcu "$1"; fi ; }
+# down and up -d
+dcdu() { if [ $# -eq 0 ]; then dcd && dcu; else dcd "$1" && dcu "$1"; fi ; }
+alias dcrmu='dcdu'
+# fd
+alias fd=fdfind
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# auto completion for pacstall
+autoload bashcompinit
+bashcompinit
+source /usr/share/bash-completion/completions/pacstall
+
+# terminal multiplexing with zellij (autostart not working)
+#eval "$(zellij setup --generate-auto-start zsh)"
+alias zj=zellij
+
+# walk
+function lk {
+  cd "$(walk --icons --preview "$@")"
+}
