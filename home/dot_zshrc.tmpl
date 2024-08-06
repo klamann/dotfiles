@@ -88,7 +88,6 @@ plugins=(
   debian{{ end }}
   themes
   ufw
-  fd
   dirhistory
   docker-compose
   python
@@ -128,7 +127,25 @@ export EDITOR=nano
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # acme.sh
-. "/home/sebi/.acme.sh/acme.sh.env"
+if [[ -r "{{ .chezmoi.homeDir }}/.acme.sh/acme.sh.env" ]]; then
+    . "{{ .chezmoi.homeDir }}/.acme.sh/acme.sh.env"
+fi
+
+# auto completion for pacstall
+autoload bashcompinit
+bashcompinit
+if [[ -r "/usr/share/bash-completion/completions/pacstall" ]]; then
+    source /usr/share/bash-completion/completions/pacstall
+fi
+
+# terminal multiplexing with zellij (autostart not working)
+#eval "$(zellij setup --generate-auto-start zsh)"
+alias zj=zellij
+
+# walk
+function lk {
+  cd "$(walk --icons --preview "$@")"
+}
 
 # docker-compose
 alias dc='docker compose'         # use compose V2
@@ -150,17 +167,3 @@ alias fd=fdfind
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# auto completion for pacstall
-autoload bashcompinit
-bashcompinit
-source /usr/share/bash-completion/completions/pacstall
-
-# terminal multiplexing with zellij (autostart not working)
-#eval "$(zellij setup --generate-auto-start zsh)"
-alias zj=zellij
-
-# walk
-function lk {
-  cd "$(walk --icons --preview "$@")"
-}
