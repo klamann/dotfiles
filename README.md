@@ -16,7 +16,7 @@ Install dotfiles on a new machine with
 
 ## random notes
 
-* [Chezmoi Docs](https://www.chezmoi.io/docs/how-to/)
-* [Template Variables](https://github.com/twpayne/chezmoi/blob/master/docs/REFERENCE.md#template-variables)
+* [Chezmoi Docs](https://www.chezmoi.io/quick-start/)
+* [Template Variables](https://www.chezmoi.io/reference/templates/variables/)
 * [Awesome dotfiles](https://github.com/webpro/awesome-dotfiles)
 * [dotfiles.github.io](https://dotfiles.github.io/)
