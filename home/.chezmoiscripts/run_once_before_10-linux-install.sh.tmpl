@@ -22,8 +22,8 @@ packages=(
 if [ -x "$(command -v apt-get)" ]; then
     # apt: Debian, Ubuntu, ...
     update='apt-get update'
-    install='apt-get install -y --ignore-missing'
-    packages+=(curl htop passwd tldr)
+    install='apt-get install -y'
+    packages+=(curl htop passwd)
 elif [ -x "$(command -v apk)" ]; then
     # apk: Alpine
     update='apk update'
