@@ -19,14 +19,14 @@ Work through this before spawning anything, and echo the outcome to the user as 
 1. The contract is a plan document, committed to the repository. If none exists, write one and get it committed first, with the user's approval. Agents receive its path and cite it; every deviation from it gets a sequential number and is recorded in the plan document with reasoning, so the plan stays the single source of truth.
 2. Gates: the exact test, lint, and format commands that define done. Take them from the project's CLAUDE.md; ask the user only for what is missing.
 3. Safety constraints: what agents must never do in this repository (elevated commands, external services, shared machines or resources, anything destructive). Combine the project's rules with the standing rules below.
-4. Commit policy: propose committing each validated milestone during the run and have the user approve that scope once, at kickoff. Never push without explicit approval.
-5. Model and effort per role, only if the agent definitions' defaults are wrong for this run.
+4. Commit policy: the implementer commits progress on the run's branch in reasonable chunks as standing policy of this workflow, and pushes only where the plan calls for it (for example so CI can verify a gate). The orchestrator creates the run branch and, when desired, the draft PR. Never push anywhere else or mark the PR ready for review without explicit user approval.
+5. Models: implementer and validator run on the latest Opus model (their definitions set `model: opus`) unless the user specifies otherwise at kickoff. Never pick a model more capable than your own.
 6. Isolation: worktree or in place, following the project's convention.
 7. Create a run directory in your scratchpad holding `status.md` (the status log) and any handover files. Pass absolute paths to every agent; agents may have different scratchpads than you.
 
 ## Standing rules for all agents
 
-- Agents never commit, stage, or push, and never rewrite git state. The orchestrator owns git.
+- The implementer commits progress on the run's branch in reasonable chunks with honest messages, and pushes only where the plan calls for it (for example to let CI verify a gate). Everything else in git belongs to the orchestrator: branches, the draft PR, anything beyond the run branch. Agents never rewrite history, never force-push, and never create or modify PRs.
 - Agents write all artifacts inside the workspace they were given, never into unrelated directories.
 - When reality disagrees with the plan, agents do the right thing and record a numbered departure in the plan document rather than silently diverging or blindly complying.
 
@@ -34,15 +34,15 @@ Work through this before spawning anything, and echo the outcome to the user as 
 
 One `status.md` per run. Agents append entries and never rewrite history, one line per entry:
 
-    [HH:MM] <step> | done|in-progress|blocked | <one line of substance>
+    [HH:MM] <step> | done|in-progress|blocked | ctx <NN>% | <one line of substance>
 
-Agents append at every milestone, blocker, and surprising discovery. The orchestrator reads the log at check-ins instead of interrupting the agent.
+Agents append at every milestone, blocker, and surprising discovery. The orchestrator reads the log at check-ins instead of interrupting the agent. The ctx field is the agent's own context window usage; the orchestrator has no other live view of it, so it must be present in every entry.
 
 ## Supervision loop
 
-Schedule a check-in every 25 to 30 minutes (ScheduleWakeup). At each check-in: read the status log, judge whether the agent is on plan, post a brief progress update to the user, and course-correct via SendMessage if needed. Never fabricate agent results; if nothing has arrived, say the agent is still running.
+Schedule a check-in every 20 minutes (ScheduleWakeup). At each check-in: read the status log, judge whether the agent is on plan, post a brief progress update to the user, and course-correct via SendMessage if needed. Never fabricate agent results; if nothing has arrived, say the agent is still running.
 
-When an agent reports its remaining context is low (the handover rule in its definition), let it finish the current step and write a handover file, then boot a successor with three paths: the plan, the handover, and the status log.
+When the status log shows context usage above 60 percent, or the agent reports that its handover rule triggered, let it finish the current step and write a handover file, then boot a successor with three paths: the plan, the handover, and the status log.
 
 ## Handover file
 
@@ -54,7 +54,7 @@ When the implementer declares done with green gates, start a fresh `validator` w
 
 Finding taxonomy: MAJOR means wrong behavior, a broken contract, or an unmet plan requirement, and blocks completion. MINOR means style, documentation, or a small hazard, and is either fixed or recorded as a decline with reasoning in the plan document. Every round after the first starts by verifying the previous round's fixes.
 
-Iterate implementer (or a dedicated fixer agent) and validator until a round reports zero majors. Record each round's outcome in the plan document. Do not commit while a validator is mid-review of the diff it was given; commit between rounds.
+Iterate implementer (or a dedicated fixer agent) and validator until a round reports zero majors. Record each round's outcome in the plan document. Give the validator a fixed commit range, so commits made after its round started do not shift the diff under review.
 
 ## Wrap-up
 

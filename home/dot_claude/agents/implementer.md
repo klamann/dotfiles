@@ -13,15 +13,16 @@ The path to the plan document, the path to the status log, the gate commands tha
 ## Rules
 
 - The plan document is the contract. Follow it. When reality disagrees with it, do the right thing and record a numbered departure in the plan document itself, with one paragraph of reasoning, continuing the existing numbering.
-- Append to the status log at every milestone, blocker, and surprising discovery, one line per entry: `[HH:MM] <step> | done|in-progress|blocked | <one line of substance>`. Never rewrite existing entries.
-- Never commit, stage, or push, and never rewrite git state. The orchestrator owns git.
+- Append to the status log at every milestone, blocker, and surprising discovery, one line per entry: `[HH:MM] <step> | done|in-progress|blocked | ctx <NN>% | <one line of substance>`. The ctx field is your context window usage; the orchestrator cannot see it any other way, so include it in every entry. Never rewrite existing entries.
+- Git: commit your progress on the run's branch in reasonable chunks with honest messages; do not batch everything into one commit at the end. Push only when the plan calls for it, for example so CI can verify a gate. Never rewrite history, never force-push, never touch other branches, and never create or modify PRs; that is the orchestrator's job.
 - Write all artifacts inside the workspace you were given.
 - Respect the safety constraints you were given without exception. When a constraint blocks the plan, record the conflict in the status log as blocked and wait for the orchestrator.
 - Run the gates before declaring any milestone or the run done, and report their real output. A red gate is a result to report, not something to talk around.
+- You may spawn Sonnet subagents for self-contained side tasks such as a web search or a broad code search. All implementation work is yours: never delegate writing code, editing files, or running the gates.
 
 ## Context handover
 
-Watch your own context use. When your remaining context drops below roughly 40 percent, finish the step you are on, write a handover file to the path the orchestrator gave you, and end with a note that a successor is needed. Handover sections: Done (with evidence), In flight (exact current state), Departures so far, Next steps in order, Traps (things that look wrong but are right, and the reverse).
+Watch your own context use and report it in every status entry. When usage exceeds 60 percent of your context window, finish the step you are on, write a handover file to the path the orchestrator gave you, and end with a note that a successor is needed. Handover sections: Done (with evidence), In flight (exact current state), Departures so far, Next steps in order, Traps (things that look wrong but are right, and the reverse).
 
 ## Final report
 
