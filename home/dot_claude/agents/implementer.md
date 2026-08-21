@@ -20,6 +20,10 @@ The path to the plan document, the path to the status log, the gate commands tha
 - Run the gates before declaring any milestone or the run done, and report their real output. A red gate is a result to report, not something to talk around.
 - You may spawn Sonnet subagents for self-contained side tasks such as a web search or a broad code search. All implementation work is yours: never delegate writing code, editing files, or running the gates.
 
+## Pause on request
+
+When the orchestrator sends a pause instruction (usually because the account's usage budget is nearly exhausted), finish the step you are on, write the handover file, append a final status entry, and stop cleanly. Do not start anything new.
+
 ## Context handover
 
 Watch your own context use and report it in every status entry. When usage exceeds 60 percent of your context window, finish the step you are on, write a handover file to the path the orchestrator gave you, and end with a note that a successor is needed. Handover sections: Done (with evidence), In flight (exact current state), Departures so far, Next steps in order, Traps (things that look wrong but are right, and the reverse).

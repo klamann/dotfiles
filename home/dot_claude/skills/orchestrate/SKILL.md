@@ -23,6 +23,7 @@ Work through this before spawning anything, and echo the outcome to the user as 
 5. Models: implementer and validator run on the latest Opus model (their definitions set `model: opus`) unless the user specifies otherwise at kickoff. Never pick a model more capable than your own.
 6. Isolation: worktree or in place, following the project's convention.
 7. Create a run directory in your scratchpad holding `status.md` (the status log) and any handover files. Pass absolute paths to every agent; agents may have different scratchpads than you.
+8. Budget control: read `~/.claude/rate-limits.json` (written by the statusline script on every render). If it is missing, stale, or carries a percentage outside 0 to 100 (a known quirk when the window has no data yet), tell the user that budget pausing is unavailable right now and continue without it.
 
 ## Standing rules for all agents
 
@@ -44,6 +45,19 @@ Schedule a check-in every 20 minutes (ScheduleWakeup). At each check-in: read th
 
 When the status log shows context usage above 60 percent, or the agent reports that its handover rule triggered, let it finish the current step and write a handover file, then boot a successor with three paths: the plan, the handover, and the status log.
 
+At every check-in, also read `~/.claude/rate-limits.json`. Above 75 percent of the five hour window, halve the check-in interval; the pause threshold is only safe if you look often enough. Above 90 percent, run the budget pause below.
+
+## Budget pause and resume
+
+Running out of the five hour usage window force-stops agents wherever they are; the controlled pause prevents that.
+
+1. Tell every running agent (SendMessage) to pause: finish the current step, write the handover (implementer) or report findings so far with an explicit unreviewed list (validator), append a final status entry, and stop.
+2. When they have stopped, or after a reasonable wait if one does not answer, write the session handover to the run directory, including what was running, where it stopped, and the planned resume time.
+3. Schedule a one-shot resumption (CronCreate with recurring false) a few minutes after `five_hour.resets_at`, converted to local time and off the full minute. The prompt must be self-contained: run name, run directory, the instruction to confirm from the rate limits file that the window has reset, respawn agents from their handovers, and restart the check-in loop.
+4. Tell the user: paused at what percentage, resuming at what local time.
+
+On resumption, confirm the window has actually reset; if it has not, schedule another one-shot 30 minutes out and stop again. Then respawn agents from their handovers and resume check-ins. If the session was closed in the meantime the cron died with it; the session handover in the run directory is the recovery path after a resume.
+
 ## Handover file
 
 Written by the outgoing agent, read by its successor. Sections: Done (with evidence), In flight (exact current state), Departures so far, Next steps in order, Traps (things that look wrong but are right, and the reverse).
@@ -59,3 +73,5 @@ Iterate implementer (or a dedicated fixer agent) and validator until a round rep
 ## Wrap-up
 
 Stop the wakeup loop. Run the gates one final time yourself and spot-check the diff; do not take the last agent's word for it. Commit per the kickoff policy. Confirm nothing is left running. Then report to the user: what shipped, measured results, validation history (rounds, majors and minors, recorded declines), the commits made, and open items.
+
+Finally, write a session handover to the run directory: everything a successor conversation needs to continue where this one ends (state of the work, decisions and their reasons, results, commits, open items, and the paths that matter), written now while the context is fresh and cached. You cannot trigger /compact yourself, and by the time the user returns the prompt cache may be cold, so this file is the cheap substitute: the user can start a fresh session from it instead of paying a full re-read of this one. Name the file's path in the final report.

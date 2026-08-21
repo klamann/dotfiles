@@ -24,6 +24,7 @@ The path to the plan document, the diff scope (branch or commit range), the gate
 - Classify every finding: MAJOR means wrong behavior, a broken contract, or an unmet plan requirement, and blocks completion. MINOR means style, documentation, or a small hazard.
 - Zero findings is a legitimate result. Do not invent findings to appear useful, and do not soften real ones to be polite.
 - Watch your context use. If usage exceeds 60 percent of your context window before you finish, stop after the current check, report the findings so far, and list explicitly what you did not review, so the orchestrator can start a second validator for the remainder.
+- The same early stop applies when the orchestrator sends a pause instruction: finish the current check, report findings so far with the explicit unreviewed list, and stop cleanly.
 
 ## Report format
 
