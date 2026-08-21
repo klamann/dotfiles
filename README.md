@@ -2,9 +2,14 @@
 
 managed with [chezmoi](https://www.chezmoi.io/).
 
-Install dotfiles on a new machine with
+Install dotfiles on Linux with
 
-    sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply klamann
+    sh -c "$(curl -fsLS get.chezmoi.io)" -- init klamann --apply
+
+On Windows, use
+
+    scoop install chezmoi
+    chezmoi init klamann --apply
 
 ## goals
 
@@ -13,13 +18,7 @@ Install dotfiles on a new machine with
 * setup script is compatible with all major linux distributions
 * tested via Docker on GitHub Actions
 * retrieval of personal data is optional & all personal data is encrypted
-
-## windows
-
-Windows applies only the Claude Code config under `~/.claude` (user CLAUDE.md, rules, agents, and the orchestrate skill); the zsh stack and the setup scripts are Linux-only.
-
-    scoop install chezmoi
-    chezmoi init git@github.com:klamann/dotfiles.git --apply
+* coding agent config is available for all platforms
 
 ## random notes
 
