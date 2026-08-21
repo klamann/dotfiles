@@ -1,3 +1,4 @@
+{{ if eq .chezmoi.os "linux" -}}
 #!/usr/bin/env bash
 set -ue
 
@@ -68,3 +69,4 @@ echo "auth sufficient pam_rootok.so" >> /etc/pam.d/chsh
 # switch to zsh
 echo "setting zsh as login shell for {{ .chezmoi.username }}"
 chsh {{ .chezmoi.username }} -s $(which zsh)
+{{ end -}}

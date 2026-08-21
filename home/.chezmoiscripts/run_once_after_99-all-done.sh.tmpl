@@ -1,3 +1,4 @@
+{{ if eq .chezmoi.os "linux" -}}
 #!/usr/bin/env zsh
 echo "setup of klamann's dotfiles with chezmoi terminated successfully."
 
@@ -6,3 +7,4 @@ if [[ -z "${CI}" ]]; then
     zsh
     source ~/.zshrc
 fi
+{{ end -}}

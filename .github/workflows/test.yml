@@ -22,8 +22,8 @@ jobs:
       - name: install dependencies
         run: apt-get update && apt-get install -y curl
       - name: install chezmoi
-        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
-      - uses: actions/checkout@v2
+        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS get.chezmoi.io)"
+      - uses: actions/checkout@v4
         with:
           path: "dotfiles"
       - name: init chezmoi from current code
@@ -41,8 +41,8 @@ jobs:
     name: Test dotfiles with chezmoi on Fedora
     steps:
       - name: install chezmoi
-        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
-      - uses: actions/checkout@v2
+        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS get.chezmoi.io)"
+      - uses: actions/checkout@v4
         with:
           path: "dotfiles"
       - name: init chezmoi from current code
@@ -62,8 +62,8 @@ jobs:
       - name: install dependencies
         run: apk add curl bash
       - name: install chezmoi
-        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
-      - uses: actions/checkout@v2
+        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS get.chezmoi.io)"
+      - uses: actions/checkout@v4
         with:
           path: "dotfiles"
       - name: init chezmoi from current code
@@ -81,8 +81,8 @@ jobs:
     name: Test dotfiles with chezmoi on Arch Linux
     steps:
       - name: install chezmoi
-        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
-      - uses: actions/checkout@v2
+        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS get.chezmoi.io)"
+      - uses: actions/checkout@v4
         with:
           path: "dotfiles"
       - name: init chezmoi from current code
@@ -100,8 +100,8 @@ jobs:
     name: Test dotfiles with chezmoi on CentOS Stream
     steps:
       - name: install chezmoi
-        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
-      - uses: actions/checkout@v2
+        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS get.chezmoi.io)"
+      - uses: actions/checkout@v4
         with:
           path: "dotfiles"
       - name: init chezmoi from current code
@@ -123,8 +123,8 @@ jobs:
           yum check-update
           yum install -y tar gzip
       - name: install chezmoi
-        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS git.io/chezmoi)"
-      - uses: actions/checkout@v2
+        run: BINDIR="$HOME/bin" sh -c "$(curl -fsLS get.chezmoi.io)"
+      - uses: actions/checkout@v4
         with:
           path: "dotfiles"
       - name: init chezmoi from current code

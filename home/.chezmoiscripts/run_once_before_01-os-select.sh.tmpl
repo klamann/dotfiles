@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-set -ue
-
-{{ if (ne .chezmoi.os "linux") -}}
-echo "klamann's dotfiles are not supported on {{ .chezmoi.os }}"
-exit 1
-{{ end }}
