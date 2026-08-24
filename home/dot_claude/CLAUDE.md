@@ -7,6 +7,7 @@
 
 ## Writing style
 
+- When writing something intended for human consumption, (comment, commit message, reply to prompt) use as few words as possible. Pick every word meticulously to reduce the volume to a strict minimum. Be down to the point. Less is more.
 - Never use em dashes (—).
 - Avoid dashes in sentences generally, including en dashes and parenthetical hyphens. Restructure the sentence or use commas, colons, a period, or whatever fits best.
 - In markdown, use **bold** and *italics* sparingly. Reserve them for important callouts, not for stylistic emphasis or to break up text. Most prose should be plain.
@@ -17,7 +18,6 @@
 
 ## Commentary
 
-- Be concise in your responses. Keep it brief and to the point when talking about facts. No rambling.
 - Only write a comment when the code cannot be made clear without it. Default to none.
 - Never comment on anything outside the code itself: no ticket/issue IDs, no history of what a bug was or how it was fixed, no notes on why a test exists or what a reviewer asked for. That belongs in commit messages and PRs.
 - Never restate what the next line already says.
